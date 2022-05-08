@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('competitions');
-        Schema::create('competions', function (Blueprint $table) {
+        // Schema::dropIfExists('competitions');
+        Schema::create('competitions', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('club_id')->unsigned();
             $table->string('name_competition');
             $table->date('date_competition');
             $table->string('address_competition');
@@ -25,6 +26,9 @@ return new class extends Migration
             $table->double('lon_competition',8,6);
             $table->string('organizational_details')->nullable();
             $table->timestamps();
+            $table->foreign('club_id')
+                    ->references('id')
+                    ->on('clubs');
 
         });
     }

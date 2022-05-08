@@ -14,6 +14,11 @@ class Competition extends Model
         'city_competition', 
         'lat_competition', 
         'lon_competition', 
-        'organizational_details', 
-    ];    
+        'organizational_details',
+        'club_id' 
+    ];
+    
+    public function club(){
+        return $this->belongsTo('App\Club');
+    }
 }

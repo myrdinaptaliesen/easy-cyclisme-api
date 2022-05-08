@@ -26,14 +26,13 @@ class CompetitionController extends Controller
             ->get()
             ->toArray();
 
-        /* Si Jointure avec table catégorie
-          $competitions = DB::table('competitions')
-                    ->join('categories', 'competitions.category_id', '=', 'categories.id')
-                    ->select('competitions.*', 'categories.name')
-                    ->get()
-                    ->toArray();
+       
+                    // ->join('categories', 'competitions.category_id', '=', 'categories.id')
+                    // ->select('competitions.*', 'categories.name')
+                    // ->get()
+                    // ->toArray();
           
-          */
+          
 
         return response()->json([
             'status' => 'Success',
@@ -50,7 +49,10 @@ class CompetitionController extends Controller
     {
         $input = $request->all();
 
+        
+
         $validator = Validator::make($input, [
+            // 'club_id',
             'name_competition' => 'required',
             'date_competition' => 'required',
             'address_competition' => 'required',
@@ -62,8 +64,11 @@ class CompetitionController extends Controller
 
         ]);
 
+        
+
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+            // return $this->sendError('Validation Error.', $validator->errors());
+            return "gros con";
         }
 
         $competition = Competition::create([
@@ -75,8 +80,11 @@ class CompetitionController extends Controller
             'lat_competition' => $request->lat_competition,
             'lon_competition' => $request->lon_competition,
             'organizational_details' => $request->organizational_details,
+            'club_id' => $request->club_id,
             
         ]);
+
+        
 
         return response()->json([
             'status' => 'Success',

@@ -29,7 +29,7 @@ class ClubController extends Controller
 
     /* Si Jointure avec table catégorie
           $clubs = DB::table('clubs')
-                    ->join('categories', 'clubs.category_id', '=', 'categories.id')
+                    ->join('competitions', 'clubs.competition_id', '=', 'categories.id')
                     ->select('clubs.*', 'categories.name')
                     ->get()
                     ->toArray();

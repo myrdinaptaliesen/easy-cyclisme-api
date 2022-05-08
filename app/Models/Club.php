@@ -9,5 +9,9 @@ class Club extends Model
     protected $fillable = [
         'name_club', 
         'logo_club'
-    ];    
+    ]; 
+    
+    public function competitions(){
+        return $this->hasMany('App\Club');
+    }
 }

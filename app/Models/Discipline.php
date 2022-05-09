@@ -1,7 +1,8 @@
 <?php
 namespace App\Models;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Competition;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Discipline extends Model
 {
@@ -9,5 +10,11 @@ class Discipline extends Model
     protected $fillable = [
         'name_discipline', 
         'image_discipline'
-    ];    
+    ]; 
+
+    public function competitions(){
+        return $this->hasMany('App\Competition');
+    }
+    
+
 }

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use Validator;
+
+use App\Models\Discipline;
+
 use App\Models\Competition;
-
 use Illuminate\Http\Request;
-
-use App\Http\Requests\competitionRequest;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\competitionRequest;
 use App\Http\Resources\CompetitionRessource;
-use Validator;
 
 
 class CompetitionController extends Controller
@@ -68,7 +69,7 @@ class CompetitionController extends Controller
 
         if ($validator->fails()) {
             // return $this->sendError('Validation Error.', $validator->errors());
-            return "gros con";
+            
         }
 
         $competition = Competition::create([
@@ -81,10 +82,14 @@ class CompetitionController extends Controller
             'lon_competition' => $request->lon_competition,
             'organizational_details' => $request->organizational_details,
             'club_id' => $request->club_id,
+            'discipline_id' => $request->discipline_id,
             
         ]);
 
-        
+      // $disciplineRequest = $request->disciplines;
+      // $disciplines = Discipline::find($disciplineRequest);
+      // $competition->disciplines()->attach($disciplines);
+
 
         return response()->json([
             'status' => 'Success',
@@ -138,6 +143,8 @@ class CompetitionController extends Controller
       $competition->lon_competition = $input['lon_competition'];
       $competition->organizational_details = $input['organizational_details'];
       $competition->save();
+
+
 
       return response()->json([
         'status' => 'Mise à jour effectuée']);

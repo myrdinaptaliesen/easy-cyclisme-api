@@ -17,19 +17,22 @@ return new class extends Migration
         Schema::create('competitions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('club_id')->unsigned();
+            $table->bigInteger('disicpline_id')->unsigned();
             $table->string('name_competition');
             $table->date('date_competition');
             $table->string('address_competition');
             $table->string('postal_code_competition');
             $table->string('city_competition');
-            $table->double('lat_competition',8,6);
-            $table->double('lon_competition',8,6);
+            $table->double('lat_competition', 8, 6);
+            $table->double('lon_competition', 8, 6);
             $table->string('organizational_details')->nullable();
             $table->timestamps();
             $table->foreign('club_id')
-                    ->references('id')
-                    ->on('clubs');
-
+                ->references('id')
+                ->on('clubs');
+            $table->foreign('discipline_id')
+                ->references('id')
+                ->on('disciplines');
         });
     }
 

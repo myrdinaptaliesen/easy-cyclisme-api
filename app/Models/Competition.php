@@ -1,7 +1,8 @@
 <?php
 namespace App\Models;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Discipline;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Competition extends Model
 {
@@ -15,10 +16,16 @@ class Competition extends Model
         'lat_competition', 
         'lon_competition', 
         'organizational_details',
-        'club_id' 
+        'club_id',
+        'discipline_id' 
     ];
     
     public function club(){
         return $this->belongsTo('App\Club');
     }
+
+    public function disicpline(){
+        return $this->belongsTo('App\Discipline');
+    }
+
 }

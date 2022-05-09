@@ -12,6 +12,6 @@ class Club extends Model
     ]; 
     
     public function competitions(){
-        return $this->hasMany('App\Club');
+        return $this->hasMany('App\Competition');
     }
 }

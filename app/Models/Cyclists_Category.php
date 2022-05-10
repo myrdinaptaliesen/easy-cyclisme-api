@@ -8,5 +8,10 @@ class Cyclists_category extends Model
     use HasFactory;
     protected $fillable = [
         'name_cyclists_category' 
-    ];    
+    ];
+    
+    public function competitions()
+    {
+        return $this->belongsToMany('App\Competitions')->withTimestamps();
+    }
 }

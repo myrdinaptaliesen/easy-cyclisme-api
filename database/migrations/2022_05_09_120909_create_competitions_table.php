@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        // Schema::dropIfExists('competitions');
+        Schema::dropIfExists('competitions');
         Schema::create('competitions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('club_id')->unsigned();
-            $table->bigInteger('disicpline_id')->unsigned();
+            $table->bigInteger('discipline_id')->unsigned();
             $table->string('name_competition');
             $table->date('date_competition');
             $table->string('address_competition');

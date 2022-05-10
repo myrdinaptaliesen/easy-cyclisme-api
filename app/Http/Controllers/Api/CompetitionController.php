@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\competitionRequest;
 use App\Http\Resources\CompetitionRessource;
-
+use App\Models\Cyclists_category;
 
 class CompetitionController extends Controller
 {
@@ -71,7 +71,7 @@ class CompetitionController extends Controller
             // return $this->sendError('Validation Error.', $validator->errors());
             
         }
-
+        
         $competition = Competition::create([
             'name_competition' => $request->name_competition,
             'date_competition' => $request->date_competition,
@@ -85,10 +85,27 @@ class CompetitionController extends Controller
             'discipline_id' => $request->discipline_id,
             
         ]);
+        
+      //Comment remplir une table pivot de façon bien dégueulasse
 
-      // $disciplineRequest = $request->disciplines;
-      // $disciplines = Discipline::find($disciplineRequest);
-      // $competition->disciplines()->attach($disciplines);
+      //Je récupère mes catégories dans le formulaire
+      $cyclistsCategories = $request->categories;
+      //Je les mets dans un tableau
+      $cyclistsCategoriesId= explode(",",$cyclistsCategories);
+      //Et le boucle pour les rentrer dans la base de données
+      for ($i=0; $i < count($cyclistsCategoriesId); $i++) { 
+        $cyclistsCategory = Cyclists_category::find($cyclistsCategoriesId[$i]);
+         $competition->cyclistsCategories()->attach($cyclistsCategory);
+       }
+      
+      
+      
+      // $cyclistsCategory = Cyclists_category::find(1);
+      // $competition->cyclistsCategories()->attach($cyclistsCategory);
+
+      // $cyclistsCategory = Cyclists_category::find(3);
+      // $competition->cyclistsCategories()->attach($cyclistsCategory);
+      
 
 
         return response()->json([

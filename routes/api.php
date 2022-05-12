@@ -41,3 +41,6 @@ Route::get('image/{filename}', [ImageController::class,'getImage'])->name('image
 
 // Catégories de cyclistes
 Route::apiResource('cyclists_category', Cyclists_categoryController::class);
+
+// Image URL
+Route::get('search', [CompetitionController::class,'search']);

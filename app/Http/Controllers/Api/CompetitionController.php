@@ -14,6 +14,7 @@ use App\Http\Requests\competitionRequest;
 use App\Http\Resources\CompetitionRessource;
 use App\Models\Cyclists_category;
 
+
 class CompetitionController extends Controller
 {
 
@@ -23,15 +24,26 @@ class CompetitionController extends Controller
     public function index()
     {
         $competitions = DB::table('competitions')
-            // ->select('competitions.name', 'competitions.id')
             ->get()
             ->toArray();
 
-       
-                    // ->join('categories', 'competitions.category_id', '=', 'categories.id')
-                    // ->select('competitions.*', 'categories.name')
-                    // ->get()
-                    // ->toArray();
+        return response()->json([
+            'status' => 'Success',
+            'data' => $competitions,
+        ]);
+
+    }
+
+    public function search(Request $request)
+    {
+        // $competitions = DB::table('competitions')
+        //     ->filter($request)
+        //     ->get()
+        //     ->toArray();
+
+        $competitions = Competition::filter($request)
+        ->get()
+        ->toArray();
           
           
 
@@ -39,6 +51,8 @@ class CompetitionController extends Controller
             'status' => 'Success',
             'data' => $competitions,
         ]);
+
+        // return Competition::filter($request)->get();
     }
 
     /*************************************************************************/
@@ -98,16 +112,6 @@ class CompetitionController extends Controller
          $competition->cyclistsCategories()->attach($cyclistsCategory);
        }
       
-      
-      
-      // $cyclistsCategory = Cyclists_category::find(1);
-      // $competition->cyclistsCategories()->attach($cyclistsCategory);
-
-      // $cyclistsCategory = Cyclists_category::find(3);
-      // $competition->cyclistsCategories()->attach($cyclistsCategory);
-      
-
-
         return response()->json([
             'status' => 'Success',
             'data' => $competition,
@@ -115,7 +119,7 @@ class CompetitionController extends Controller
     }
 
     /*************************************************************************/
-    /**** Méthode GET - Afficher la fiche d'competition*****/
+    /**** Méthode GET - Afficher la fiche d'une competition*****/
     /*************************************************************************/
 
       public function show(Competition $competition)

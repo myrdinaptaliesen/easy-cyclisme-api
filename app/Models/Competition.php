@@ -2,7 +2,9 @@
 namespace App\Models;
 use App\Models\Discipline;
 use App\Models\Cyclists_Category;
+use App\Filters\CompetitionFilter;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Competition extends Model
@@ -31,6 +33,12 @@ class Competition extends Model
 
     public function cyclistsCategories(){
         return $this->belongsToMany(Cyclists_Category::class)->withTimestamps();
+    }
+
+    //Filtres pour la fonction de tri
+    public function scopeFilter(Builder $builder, $request)
+    {
+        return (new CompetitionFilter($request))->filter($builder);
     }
 
 }

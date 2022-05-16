@@ -46,11 +46,6 @@ class CompetitionController extends Controller
       ->get()
       ->toArray();
 
-
-    // ->select('cyclistsCategorys.*', 'categories.name')
-    // ->get()
-    // ->toArray();
-
     return response()->json([
       'status' => 'Success',
       'data' => $competitions,

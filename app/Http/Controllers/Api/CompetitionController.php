@@ -24,9 +24,6 @@ class CompetitionController extends Controller
   public function index()
   {
     $competitions = DB::table('competitions')
-      ->join('competition_cyclists_category', 'competitions.id', '=', 'competition_cyclists_category.competition_id')
-      ->join('cyclists_categories', 'cyclists_categories.id', '=', 'competition_cyclists_category.cyclists_category_id')
-      ->select('competitions.*', 'cyclists_categories.*')
       ->get()
       ->toArray();
 
@@ -55,66 +52,64 @@ class CompetitionController extends Controller
   }
 
   /*************************************************************************/
-  /**** Méthode POST *****/
+  /**** Méthode - Ajouter un competition*****/
   /*************************************************************************/
 
-  // Méthode - POST Ajouter un competition
   public function store(Request $request)
   {
     $input = $request->all();
 
-
-
     $validator = Validator::make($input, [
-      // 'club_id',
-      'name_competition' => 'required',
+      'name_competition' => 'required|max:100',
       'date_competition' => 'required',
-      'address_competition' => 'required',
-      'postal_code_competition' => 'required',
-      'city_competition' => 'required',
-      'lat_competition' => 'required',
-      'lon_competition' => 'required',
-      'organizational_details',
+      'address_competition' => 'required|max:100',
+      'postal_code_competition' => 'required|max:5',
+      'city_competition' => 'required|max:100',
+      'lat_competition' => 'required|numeric',
+      'lon_competition' => 'required|numeric',
+      'organizational_details' => 'max:200',
 
     ]);
 
 
 
     if ($validator->fails()) {
-      // return $this->sendError('Validation Error.', $validator->errors());
+      return response()->json(
+        [
+          'status' => 422,
+          'validate_err' => $validator->messages()
+        ]
+      );
+    } else {
+      $competition = Competition::create([
+        'name_competition' => $request->name_competition,
+        'date_competition' => $request->date_competition,
+        'address_competition' => $request->address_competition,
+        'postal_code_competition' => $request->postal_code_competition,
+        'city_competition' => $request->city_competition,
+        'lat_competition' => $request->lat_competition,
+        'lon_competition' => $request->lon_competition,
+        'organizational_details' => $request->organizational_details,
+        'club_id' => $request->club_id,
+        'discipline_id' => $request->discipline_id,
 
+      ]);
+      //Comment remplir une table pivot de façon bien dégueulasse
+
+      //Je récupère mes catégories dans le formulaire
+      $cyclistsCategories = $request->categories;
+      //Je les mets dans un tableau
+      $cyclistsCategoriesId = explode(",", $cyclistsCategories);
+      //Et le boucle pour les rentrer dans la base de données
+      for ($i = 0; $i < count($cyclistsCategoriesId); $i++) {
+        $cyclistsCategory = Cyclists_category::find($cyclistsCategoriesId[$i]);
+        $competition->cyclistsCategories()->attach($cyclistsCategory);
+      }
+      return response()->json([
+        'status' => 'Success',
+        'data' => $competition,
+      ]);
     }
-
-    $competition = Competition::create([
-      'name_competition' => $request->name_competition,
-      'date_competition' => $request->date_competition,
-      'address_competition' => $request->address_competition,
-      'postal_code_competition' => $request->postal_code_competition,
-      'city_competition' => $request->city_competition,
-      'lat_competition' => $request->lat_competition,
-      'lon_competition' => $request->lon_competition,
-      'organizational_details' => $request->organizational_details,
-      'club_id' => $request->club_id,
-      'discipline_id' => $request->discipline_id,
-
-    ]);
-
-    //Comment remplir une table pivot de façon bien dégueulasse
-
-    //Je récupère mes catégories dans le formulaire
-    $cyclistsCategories = $request->categories;
-    //Je les mets dans un tableau
-    $cyclistsCategoriesId = explode(",", $cyclistsCategories);
-    //Et le boucle pour les rentrer dans la base de données
-    for ($i = 0; $i < count($cyclistsCategoriesId); $i++) {
-      $cyclistsCategory = Cyclists_category::find($cyclistsCategoriesId[$i]);
-      $competition->cyclistsCategories()->attach($cyclistsCategory);
-    }
-
-    return response()->json([
-      'status' => 'Success',
-      'data' => $competition,
-    ]);
   }
 
   /*************************************************************************/
@@ -140,46 +135,45 @@ class CompetitionController extends Controller
     $input = $request->all();
 
     $validator = Validator::make($input, [
-      'name_competition' => 'required',
+      'name_competition' => 'required|max:100',
       'date_competition' => 'required',
-      'address_competition' => 'required',
-      'postal_code_competition' => 'required',
-      'city_competition' => 'required',
-      'lat_competition' => 'required',
-      'lon_competition' => 'required',
-      'organizational_details',
+      'address_competition' => 'required|max:100',
+      'postal_code_competition' => 'required|max:5',
+      'city_competition' => 'required|max:100',
+      'lat_competition' => 'required|numeric',
+      'lon_competition' => 'required|numeric',
+      'organizational_details' => 'max:200'
     ]);
 
     if ($validator->fails()) {
       return $this->sendError('Validation Error.', $validator->errors());
+    } else {
+
+      $competition->name_competition = $input['name_competition'];
+      $competition->date_competition = $input['date_competition'];
+      $competition->address_competition = $input['address_competition'];
+      $competition->postal_code_competition = $input['postal_code_competition'];
+      $competition->city_competition = $input['city_competition'];
+      $competition->lat_competition = $input['lat_competition'];
+      $competition->lon_competition = $input['lon_competition'];
+      $competition->organizational_details = $input['organizational_details'];
+      $competition->save();
+
+      return response()->json([
+        'status' => 'Mise à jour effectuée'
+      ]);
     }
-
-    $competition->name_competition = $input['name_competition'];
-    $competition->date_competition = $input['date_competition'];
-    $competition->address_competition = $input['address_competition'];
-    $competition->postal_code_competition = $input['postal_code_competition'];
-    $competition->city_competition = $input['city_competition'];
-    $competition->lat_competition = $input['lat_competition'];
-    $competition->lon_competition = $input['lon_competition'];
-    $competition->organizational_details = $input['organizational_details'];
-    $competition->save();
-
-
-
-    return response()->json([
-      'status' => 'Mise à jour effectuée'
-    ]);
   }
 
   /*************************************************************************/
   /**** Méthode DELETE - Supprimer une fiche competition *****/
   /*************************************************************************/
-  // Méthode 1
+  
   public function destroy(Competition $competition)
   {
     $competition->delete();
     return response()->json([
-      'status' => 'La compétition a bien été supprimé'
+      'status' => 'La compétition a bien été supprimée'
     ]);
   }
 }

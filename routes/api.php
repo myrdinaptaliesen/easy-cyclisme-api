@@ -25,30 +25,29 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 // Club
-Route::apiResource('club', ClubController::class)
-    ->middleware('auth');
+Route::apiResource('club', ClubController::class);
+
 
 // Logo URL
 Route::get('logo/{filename}', [LogoController::class,'getLogo'])
-    ->name('logo.getLogo')
-    ->middleware('auth'); 
+    ->name('logo.getLogo');
+
 
 // Competition
-Route::apiResource('competition', CompetitionController::class)
-    ->middleware('auth');
+Route::apiResource('competition', CompetitionController::class);
+
 
 // Discipline
-Route::apiResource('discipline', DisciplineController::class)
-    ->middleware('auth');
+Route::apiResource('discipline', DisciplineController::class);
+
 
 // Image URL
 Route::get('image/{filename}', [ImageController::class,'getImage'])
-    ->middleware('auth')
     ->name('image.getImage');
 
 // Catégories de cyclistes
-Route::apiResource('cyclists_category', Cyclists_categoryController::class)
-    ->middleware('auth');
+Route::apiResource('cyclists_category', Cyclists_categoryController::class);
+
 
 // Image URL
 Route::get('search', [CompetitionController::class,'search']);

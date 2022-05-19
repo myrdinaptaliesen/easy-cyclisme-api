@@ -49,5 +49,5 @@ Route::get('image/{filename}', [ImageController::class,'getImage'])
 Route::apiResource('cyclists_category', Cyclists_categoryController::class);
 
 
-// Image URL
+// Requête de recherche de compétitions 
 Route::get('search', [CompetitionController::class,'search']);
